@@ -16,21 +16,19 @@ public class LogParser {
      * @param textToProcess         source text with anchors
      * @return List of founded anchors
      */
-    public List<String> searchAnchors(List<String> anchorsRegExpressions, String textToProcess) {
+    public void searchAnchors(List<String> anchorsRegExpressions, String textToProcess, Set<String> destSet) {
         if (anchorsRegExpressions == null || anchorsRegExpressions.isEmpty() || textToProcess == null || textToProcess.isEmpty())
-            return new LinkedList<>();
-        List<String> result = new LinkedList<>();
+            return;
         for (String anchorExp : anchorsRegExpressions) {
             Pattern p = Pattern.compile(anchorExp);
             Matcher m = p.matcher(textToProcess);
             if (m.find()) {
                 if (anchorExp.contains("ThreadID")) {
-                    result.add(m.group());
+                    destSet.add(m.group());
                 } else
-                    result.add(m.group(2));
+                    destSet.add(m.group(2));
             }
         }
-        return result;
     }
 
     /**

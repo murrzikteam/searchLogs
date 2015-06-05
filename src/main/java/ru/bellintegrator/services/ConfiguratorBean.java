@@ -10,8 +10,8 @@ public class ConfiguratorBean {
     public ConfiguratorBean() {
         logsFilePath = "";
         resultsFilePath = "";
-        searchKeywords = new ArrayList<>();
-        badWords = new ArrayList<>();
+        searchKeywords = new HashSet<>();
+        badWords = new HashSet<>();
         casheInMb = 1;
         logsEndAnchor = "|#]";
         regExpressionsList = new ArrayList<>();
@@ -20,8 +20,8 @@ public class ConfiguratorBean {
 
     private String logsFilePath;
     private String resultsFilePath;
-    private List<String> searchKeywords;
-    private List<String> badWords;
+    private Set<String> searchKeywords;
+    private Set<String> badWords;
     private int casheInMb;
     private String logsEndAnchor;
     private List<String> regExpressionsList;
@@ -43,11 +43,11 @@ public class ConfiguratorBean {
         this.resultsFilePath = resultsFilePath;
     }
 
-    public List<String> getSearchKeywords() {
+    public Set<String> getSearchKeywords() {
         return searchKeywords;
     }
 
-    public List<String> getBadWords() {
+    public Set<String> getBadWords() {
         return badWords;
     }
 
@@ -57,7 +57,7 @@ public class ConfiguratorBean {
     }
 
     public void setCasheInMb(int casheInMb) {
-        this.casheInMb = casheInMb;
+        this.casheInMb = casheInMb * 1000000;
     }
 
     public String getLogsEndAnchor() {
