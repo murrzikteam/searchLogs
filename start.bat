@@ -1,0 +1,1 @@
+java -jar target/searchlogs-1.0-SNAPSHOT.jar
