@@ -18,7 +18,7 @@ public class Main {
         config.setResultsFilePath(new Main().getClass().getProtectionDomain().getCodeSource().getLocation().getPath().replace("bin/", "") + "searchResults.txt");
         config.getSearchKeywords().add("CallBack");
         config.getBadWords().add("trouble");
-        config.setCasheInMb(10);
+        config.setCasheInMb(5);
         config.getRegExpressionsList().add("(_ThreadID=)([^;]+)(;)");
         config.getRegExpressionsList().add("(.*)([0-9]{15,15}\\-[0-9]{4,4}\\-[0-9]{18,18})(.*)");
         config.getRegExpressionsList().add("(RequestID=)([a-z0-9\\-]+)(\\;)");
@@ -45,10 +45,12 @@ public class Main {
                         if(logsCashe.toString().length() > config.getCasheInMb()) {
                             fProcessor.writeTextToFile(logsCashe.toString(), config.getResultsFilePath(), true);
                             logsCashe = new StringBuilder();
+                            System.out.println("Results was added");
                         }
                     }
                 }
             }
+            if (!logsCashe.toString().isEmpty()) fProcessor.writeTextToFile(logsCashe.toString(), config.getResultsFilePath(), true);
         } catch (IOException e) {
             e.printStackTrace();
         }
