@@ -1,0 +1,15 @@
+.root{
+    -fx-background-color: antiquewhite;
+}
+
+.button {
+    -fx-background-color: linear-gradient(#77ff55, #119900);
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#55dd33, #117700);
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(#33ee11, #115500);
+}

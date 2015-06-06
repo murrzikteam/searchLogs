@@ -1,5 +1,6 @@
 package ru.bellintegrator.core;
 
+import ru.bellintegrator.gui.MainWindow;
 import ru.bellintegrator.services.ConfiguratorBean;
 import ru.bellintegrator.services.FileProcessor;
 import ru.bellintegrator.services.LogParser;
@@ -13,6 +14,10 @@ import java.util.*;
  */
 public class Main {
     public static void main(String[] args) {
+        MainWindow window = new MainWindow();
+        window.init(args);
+    }
+    private static void test() {
         ConfiguratorBean config = new ConfiguratorBean();
         config.setLogsFilePath(new Main().getClass().getProtectionDomain().getCodeSource().getLocation().getPath().replace("bin/", "") + "log.txt");
         config.setResultsFilePath(new Main().getClass().getProtectionDomain().getCodeSource().getLocation().getPath().replace("bin/", "") + "searchResults.txt");
