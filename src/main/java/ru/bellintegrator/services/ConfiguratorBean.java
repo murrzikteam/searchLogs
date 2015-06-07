@@ -15,6 +15,10 @@ public class ConfiguratorBean {
         casheInMb = 1;
         logsEndAnchor = "|#]";
         regExpressionsList = new ArrayList<>();
+        regExpressionsList.add("(_ThreadID=)([^;]+)(;)");
+        regExpressionsList.add("(.*)([0-9]{15,15}\\-[0-9]{4,4}\\-[0-9]{18,18})(.*)");
+        regExpressionsList.add("(RequestID=)([a-z0-9\\-]+)(\\;)");
+        regExpressionsList.add("([^0-9a-z\\:\\.])([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\:[0-9a-z\\:\\.]+)(\\:\\-)");
         foundAnchorsSet = new HashSet<>();
     }
 

@@ -54,4 +54,38 @@ public class LogParser {
         }
         return false;
     }
+
+    public static void test(ConfiguratorBean config) {
+        FileProcessor fProcessor = new FileProcessor();
+        LogParser lParser = new LogParser();
+
+        try (InputStream f1 = fProcessor.getFileInputStream(config.getLogsFilePath())) {
+            String logRecord = "";
+            fProcessor.writeTextToFile(logRecord, config.getResultsFilePath(), false);
+            int av = f1.available();
+            StringBuilder logsCashe = new StringBuilder();
+            for (int i = 0; i < av; i++) {
+                logRecord += (char) f1.read();
+                if (logRecord.contains(config.getLogsEndAnchor())) {
+                    if(lParser.detectAnchor(logRecord, config.getBadWords(), true)) {
+                        logRecord = "";
+                        continue;
+                    }
+                    if(lParser.detectAnchor(logRecord, config.getSearchKeywords(), false) || lParser.detectAnchor(logRecord, config.getFoundAnchorsSet(), false)){
+                        lParser.searchAnchors(config.getRegExpressionsList(), logRecord, config.getFoundAnchorsSet());
+                        logsCashe.append(logRecord);
+                        logRecord = "";
+                        if(logsCashe.toString().length() > config.getCasheInMb()) {
+                            fProcessor.writeTextToFile(logsCashe.toString(), config.getResultsFilePath(), true);
+                            logsCashe = new StringBuilder();
+                        }
+                    }
+                    logRecord = "";
+                }
+            }
+            if (!logsCashe.toString().isEmpty()) fProcessor.writeTextToFile(logsCashe.toString(), config.getResultsFilePath(), true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

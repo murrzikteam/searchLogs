@@ -71,15 +71,49 @@ public class Properties {
         keyWordView.setMinHeight(50);
         keyWordView.setEditable(true);
         keyWordView.getItems().addAll(createdConfig.getSearchKeywords());
-        VBox keyWordsBox = new VBox(2);
-        keyWordsBox.getChildren().addAll(keyWordsLabel, keyWordView);
+        TextField addKeyWord = new TextField();
+        addKeyWord.setPromptText("Ключевое слово");
+        Button addKeyWordButton = new Button("+");
+        addKeyWordButton.setOnAction(e -> {
+            if(!addKeyWord.getText().isEmpty()) {
+                keyWordView.getItems().add(addKeyWord.getText());
+                addKeyWord.setText("");
+            }
+        });
+        Button delKeyWordButton = new Button("-");
+        delKeyWordButton.setOnAction(e -> {
+            if(keyWordView.getSelectionModel().getSelectedIndex() != -1) {
+                keyWordView.getItems().remove(keyWordView.getSelectionModel().getSelectedItem());
+            }
+        });
+        HBox editeKeywordBox = new HBox(3);
+        editeKeywordBox.getChildren().addAll(addKeyWord, addKeyWordButton, delKeyWordButton);
+        VBox keyWordsBox = new VBox(3);
+        keyWordsBox.getChildren().addAll(keyWordsLabel, keyWordView, editeKeywordBox);
 
         Label badWordsLabel = new Label("Ключевые слова для исключения логов:");
         ListView<String> badWordsView = new ListView<>();
         badWordsView.setEditable(true);
         badWordsView.getItems().addAll(createdConfig.getBadWords());
-        VBox badWordsBox = new VBox(2);
-        badWordsBox.getChildren().addAll(badWordsLabel, badWordsView);
+        TextField addBadWord = new TextField();
+        addBadWord.setPromptText("Запретное слово");
+        Button addBadWordButton = new Button("+");
+        addBadWordButton.setOnAction(e -> {
+            if(!addBadWord.getText().isEmpty()) {
+                badWordsView.getItems().add(addBadWord.getText());
+                addBadWord.setText("");
+            }
+        });
+        Button delBadWordButton = new Button("-");
+        delBadWordButton.setOnAction(e -> {
+            if(badWordsView.getSelectionModel().getSelectedIndex() != -1) {
+                badWordsView.getItems().remove(badWordsView.getSelectionModel().getSelectedItem());
+            }
+        });
+        HBox editBadBox = new HBox(3);
+        editBadBox.getChildren().addAll(addBadWord, addBadWordButton, delBadWordButton);
+        VBox badWordsBox = new VBox(3);
+        badWordsBox.getChildren().addAll(badWordsLabel, badWordsView, editBadBox);
 
         HBox wordsBox = new HBox(2);
         wordsBox.getChildren().addAll(keyWordsBox, badWordsBox);
@@ -88,10 +122,9 @@ public class Properties {
         Label cacheLabel = new Label("Размер кеша результатов");
         TextField cacheField = new TextField("" + createdConfig.getCasheInMb());
         Label cacheMeasureLabel = new Label("Mb");
-        BorderPane cachePane = new BorderPane();
-        cachePane.setLeft(cacheLabel);
-        cachePane.setCenter(cacheField);
-        cachePane.setRight(cacheMeasureLabel);
+
+        HBox cacheBox = new HBox(3);
+        cacheBox.getChildren().addAll(cacheLabel, cacheField, cacheMeasureLabel);
 
         // Текст, идентифицирующий окончание лога
         Label logsEndLabel = new Label("Текст, идентифицирующий окончание лога");
@@ -104,12 +137,46 @@ public class Properties {
         ListView<String> regExpView = new ListView<>();
         regExpView.setEditable(true);
         regExpView.getItems().addAll(createdConfig.getRegExpressionsList());
+        TextField addRegExp = new TextField();
+        addRegExp.setPromptText("Регулярное выражение");
+        Button addRegExpButton = new Button("+");
+        addRegExpButton.setOnAction(e -> {
+            if(!addRegExp.getText().isEmpty()) {
+                regExpView.getItems().add(addRegExp.getText());
+                addRegExp.setText("");
+            }
+        });
+        Button delRegExpButton = new Button("-");
+        delRegExpButton.setOnAction(e -> {
+            if(regExpView.getSelectionModel().getSelectedIndex() != -1) {
+                regExpView.getItems().remove(regExpView.getSelectionModel().getSelectedItem());
+            }
+        });
+        HBox editRegExpBox = new HBox(3);
+        editRegExpBox.getChildren().addAll(addRegExp, addRegExpButton, delRegExpButton);
         Label anchorLabel = new Label("Якоря логов:");
         ListView<String> anchorView = new ListView<>();
         anchorView.setEditable(true);
         anchorView.getItems().addAll(createdConfig.getFoundAnchorsSet());
-        VBox anchorsBox = new VBox(4);
-        anchorsBox.getChildren().addAll(regExpLabel, regExpView, anchorLabel, anchorView);
+        TextField addAnchors = new TextField();
+        addAnchors.setPromptText("Якорь");
+        Button addAnchorsButton = new Button("+");
+        addAnchorsButton.setOnAction(e -> {
+            if(!addAnchors.getText().isEmpty()) {
+                anchorView.getItems().add(addAnchors.getText());
+                addAnchors.setText("");
+            }
+        });
+        Button delAnchorsButton = new Button("-");
+        delAnchorsButton.setOnAction(e -> {
+            if(anchorView.getSelectionModel().getSelectedIndex() != -1) {
+                anchorView.getItems().remove(anchorView.getSelectionModel().getSelectedItem());
+            }
+        });
+        HBox editAnchorsBox = new HBox(3);
+        editAnchorsBox.getChildren().addAll(addAnchors, addAnchorsButton, delAnchorsButton);
+        VBox anchorsBox = new VBox(6);
+        anchorsBox.getChildren().addAll(regExpLabel, regExpView, editRegExpBox, anchorLabel, anchorView, editAnchorsBox);
 
         // Кнопки управления
         Button loadDefaultsButton = new Button("Загрузить умолчания");
@@ -118,22 +185,27 @@ public class Properties {
         submitButton.setOnAction(e -> {
             createdConfig.setLogsFilePath(logPathField.getText());
             createdConfig.setResultsFilePath(resultsPathField.getText());
+            createdConfig.getSearchKeywords().clear();
             createdConfig.getSearchKeywords().addAll(keyWordView.getItems());
+            createdConfig.getBadWords().clear();
             createdConfig.getBadWords().addAll(badWordsView.getItems());
             createdConfig.setCasheInMb(Integer.parseInt(cacheField.getText()));
             createdConfig.setLogsEndAnchor(logsEndField.getText());
+            createdConfig.getRegExpressionsList().clear();
             createdConfig.getRegExpressionsList().addAll(regExpView.getItems());
+            createdConfig.getFoundAnchorsSet().clear();
             createdConfig.getFoundAnchorsSet().addAll(anchorView.getItems());
             window.close();
         });
         Button cancelButton = new Button("Отменить");
         cancelButton.setOnAction(e -> window.close());
         HBox buttonsBox = new HBox(4);
+        buttonsBox.setAlignment(Pos.CENTER);
         buttonsBox.getChildren().addAll(loadDefaultsButton, editDefaultsButton, submitButton, cancelButton);
 
         // Объединение панелей
         VBox panelsGroup = new VBox(6);
-        panelsGroup.getChildren().addAll(pathPane, wordsBox, cachePane, logsEndBox, anchorsBox, buttonsBox);
+        panelsGroup.getChildren().addAll(pathPane, wordsBox, cacheBox, logsEndBox, anchorsBox, buttonsBox);
 
         Scene scene = new Scene(panelsGroup);
         scene.getStylesheets().add("css/Evil.css");

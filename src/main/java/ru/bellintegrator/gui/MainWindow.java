@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ru.bellintegrator.services.ConfiguratorBean;
+import ru.bellintegrator.services.LogParser;
 
 /**
  * Created by DOrdynskiy on 05.06.2015.
@@ -30,12 +31,18 @@ public class MainWindow extends Application {
         Button propertiesButton = new Button("Параметры поиска");
 
         searchButton.setOnAction(e -> {
-
+            LogParser.test(config);
         });
 
         propertiesButton.setOnAction(e -> {
             Properties.display(config);
-            System.out.println("Not null");
+            if ((config.getLogsFilePath() != null && !config.getLogsFilePath().isEmpty()) &&
+                    (config.getResultsFilePath() != null && !config.getResultsFilePath().isEmpty()) &&
+                    (config.getSearchKeywords() != null &&  !config.getSearchKeywords().isEmpty())) {
+                searchButton.setDisable(false);
+            } else {
+                searchButton.setDisable(true);
+            }
         });
 
         HBox layout = new HBox(2);
