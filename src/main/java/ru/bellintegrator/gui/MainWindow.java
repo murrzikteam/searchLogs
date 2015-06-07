@@ -25,7 +25,7 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
-        Button searchButton = new Button("Искать");
+        Button searchButton = new Button("Process...");
         searchButton.setDisable(true);
         Button propertiesButton = new Button("Параметры поиска");
 
