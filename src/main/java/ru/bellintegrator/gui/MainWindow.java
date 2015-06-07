@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -22,21 +23,27 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
-        Label label = new Label("My Label");
-        Button button = new Button("Close");
+        Button searchButton = new Button("Искать");
+        searchButton.setDisable(true);
+        Button propertiesButton = new Button("Параметры поиска");
 
-        button.setOnAction(e -> {
-            String result = Properties.display("Title of the window", "Message");
-            System.out.println(result);
+        searchButton.setOnAction(e -> {
+
         });
 
-        VBox layout = new VBox(20);
+        propertiesButton.setOnAction(e -> {
+            Properties.display();
+        });
+
+        HBox layout = new HBox(2);
         layout.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(label, button);
-        scene = new Scene(layout, 300, 250);
+        layout.getChildren().addAll(searchButton, propertiesButton);
+        scene = new Scene(layout, 350, 100);
         scene.getStylesheets().add("css/Evil.css");
+        window.setMinWidth(350);
+        window.setMaxWidth(100);
         window.setScene(scene);
-        window.setTitle("Title here");
+        window.setTitle("Парсер логов");
         window.show();
     }
 }

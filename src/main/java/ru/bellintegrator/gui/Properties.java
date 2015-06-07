@@ -18,13 +18,12 @@ import javafx.stage.Stage;
 public class Properties {
     static String answer;
 
-    public static String display(String title, String message) {
+    public static void display() {
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle(title);
+        window.setTitle("Параметры поиска");
 
-        Label label = new Label(message);
         Button yesButton = new Button("yes");
         Button noButton = new Button("no");
         yesButton.setOnAction(e -> {
@@ -69,7 +68,7 @@ public class Properties {
         });
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(label, yesButton);
+        layout.getChildren().addAll(yesButton);
         layout.setAlignment(Pos.CENTER);
 
         HBox hBox = new HBox(10);
@@ -116,7 +115,6 @@ public class Properties {
         scene.getStylesheets().add("css/Evil.css");
         window.setScene(scene);
         window.showAndWait();
-        return answer;
     }
 
     public static TreeItem<String> makeBranch(String title, TreeItem<String> parent) {
