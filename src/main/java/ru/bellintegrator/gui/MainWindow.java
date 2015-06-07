@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ru.bellintegrator.services.ConfiguratorBean;
 
 /**
  * Created by DOrdynskiy on 05.06.2015.
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 public class MainWindow extends Application {
     Stage window;
     Scene scene;
+    ConfiguratorBean config = new ConfiguratorBean();
 
     public void init(String [] args) {
         launch(args);
@@ -32,7 +34,10 @@ public class MainWindow extends Application {
         });
 
         propertiesButton.setOnAction(e -> {
-            Properties.display();
+            Properties.display(config);
+            if (config != null) {
+                System.out.println("Not null");
+            }
         });
 
         HBox layout = new HBox(2);

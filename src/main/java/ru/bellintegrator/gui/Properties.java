@@ -11,116 +11,107 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ru.bellintegrator.services.ConfiguratorBean;
 
 /**
  * Created by DOrdynskiy on 05.06.2015.
  */
 public class Properties {
-    static String answer;
-
-    public static void display() {
+    public static void display(ConfiguratorBean createdConfig) {
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Параметры поиска");
 
-        Button yesButton = new Button("yes");
-        Button noButton = new Button("no");
-        yesButton.setOnAction(e -> {
-            answer = "true";
+        // Пути к файлам логов и результатов поиска
+        Label logPathLabel = new Label("Лог файл");
+        Label resultsPathLabel = new Label("Файл с результатами поиска");
+        VBox pathLabels = new VBox(2);
+        pathLabels.getChildren().addAll(logPathLabel, resultsPathLabel);
+
+        TextField logPathField = new TextField();
+        logPathField.setPromptText("Введите путь к файлу с логами");
+        TextField resultsPathField = new TextField();
+        resultsPathField.setPromptText("Введите путь к файлу с результатами поиска");
+        VBox pathFields = new VBox(2);
+        pathFields.getChildren().addAll(logPathField, resultsPathField);
+
+        Button openLogsButton = new Button("Найти");
+        Button openResultsButton = new Button("Найти");
+        VBox pathButtons = new VBox(2);
+        pathButtons.getChildren().addAll(openLogsButton, openResultsButton);
+
+        BorderPane pathPane = new BorderPane();
+        pathPane.setLeft(pathLabels);
+        pathPane.setCenter(pathFields);
+        pathPane.setRight(pathButtons);
+
+        // Ключевые слова для включения или исключения логов из результатов поиска
+        Label keyWordsLabel = new Label("Ключевые слова для поиска логов:");
+        ListView keyWordView = new ListView();
+        keyWordView.setMinHeight(50);
+        keyWordView.setEditable(true);
+        VBox keyWordsBox = new VBox(2);
+        keyWordsBox.getChildren().addAll(keyWordsLabel, keyWordView);
+
+        Label badWordsLabel = new Label("Ключевые слова для исключения логов:");
+        ListView badWordsView = new ListView();
+        keyWordView.setEditable(true);
+        VBox badWordsBox = new VBox(2);
+        badWordsBox.getChildren().addAll(badWordsLabel, badWordsView);
+
+        HBox wordsBox = new HBox(2);
+        wordsBox.getChildren().addAll(keyWordsBox, badWordsBox);
+
+        // Размер кеша хранимых результатов перед записью в файл
+        Label cacheLabel = new Label("Размер кеша результатов");
+        TextField cacheField = new TextField();
+        Label cacheMeasureLabel = new Label("Mb");
+        BorderPane cachePane = new BorderPane();
+        cachePane.setLeft(cacheLabel);
+        cachePane.setCenter(cacheField);
+        cachePane.setRight(cacheMeasureLabel);
+
+        // Текст, идентифицирующий окончание лога
+        Label logsEndLabel = new Label("Текст, идентифицирующий окончание лога");
+        TextField logsEndField = new TextField();
+        HBox logsEndBox = new HBox(2);
+        logsEndBox.getChildren().addAll(logsEndLabel, logsEndField);
+
+        // Дополнительные слова для поиска логов
+        Label regExpLabel = new Label("Регулярные выражения для поиска якорей логов:");
+        ListView regExpView = new ListView();
+        regExpView.setEditable(true);
+        Label anchorLabel = new Label("Якоря логов:");
+        ListView anchorView = new ListView();
+        anchorView.setEditable(true);
+        VBox anchorsBox = new VBox(4);
+        anchorsBox.getChildren().addAll(regExpLabel, regExpView, anchorLabel, anchorView);
+
+        // Кнопки управления
+        Button loadDefaultsButton = new Button("Загрузить умолчания");
+        Button editDefaultsButton = new Button("Сохранить в умолчания");
+        Button submitButton = new Button("Применить");
+        Button cancelButton = new Button("Отменить");
+        HBox buttonsBox = new HBox(4);
+        buttonsBox.getChildren().addAll(loadDefaultsButton, editDefaultsButton, submitButton, cancelButton);
+
+        // Объединение панелей
+        VBox panelsGroup = new VBox(6);
+        panelsGroup.getChildren().addAll(pathPane, wordsBox, cachePane, logsEndBox, anchorsBox, buttonsBox);
+
+        // События к элементам меню
+        cancelButton.setOnAction(e -> {
             window.close();
         });
 
-        ChoiceBox<String> choiceBox = new ChoiceBox<>();
-        TextField textField = new TextField("Def");
-        CheckBox checkBox = new CheckBox("12");
-        ListView listView = new ListView();
-        listView.getItems().addAll("item 1", "item 2", "item 3");
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        ObservableList<String> selected = listView.getSelectionModel().getSelectedItems();
-
-        TreeItem<String> root, bucky, megan;
-        root = new TreeItem<>();
-        root.setExpanded(true);
-        bucky = makeBranch("Bucky", root);
-        makeBranch("thenewboston", bucky);
-        makeBranch("YouTube", bucky);
-        makeBranch("Chicken", bucky);
-
-
-        megan = makeBranch("Megan", root);
-        makeBranch("Glitter", megan);
-        makeBranch("Makeup", megan);
-
-        TreeView<String> treeView = new TreeView<>(root);
-        treeView.setShowRoot(false);
-        HBox hBox2 = new HBox(10);
-        hBox2.setAlignment(Pos.CENTER);
-        hBox2.getChildren().add(treeView);
-
-        noButton.setOnAction(e -> {
-            answer = textField.getText() + " - " + checkBox.isSelected() + " " + choiceBox.getValue();
-            System.out.println();
-            for(String item : selected) {
-                System.out.println(item);
-            }
-            window.close();
-        });
-
-        VBox layout = new VBox(10);
-        layout.getChildren().addAll(yesButton);
-        layout.setAlignment(Pos.CENTER);
-
-        HBox hBox = new HBox(10);
-        hBox.setAlignment(Pos.CENTER);
-        hBox.getChildren().add(noButton);
-
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(8);
-        grid.setHgap(10);
-        checkBox.setSelected(true);
-        TextField textField2 = new TextField();
-        textField2.setPromptText("DefPrompt");
-        Button button22 = new Button("22");
-        //button22.setOnMousePressed(e -> button22.setStyle("-fx-background-color: linear-gradient(#55ff33, #004400)"));
-        //button22.setOnMouseReleased(e -> button22.setStyle("-fx-background-color: linear-gradient(#55ff33, #007700)"));
-
-
-        GridPane.setConstraints(listView, 0, 0);
-        GridPane.setConstraints(checkBox, 1, 0);
-        GridPane.setConstraints(treeView, 2, 0);
-        GridPane.setConstraints(textField, 0, 1);
-        GridPane.setConstraints(button22, 1, 1);
-        GridPane.setConstraints(textField2, 2, 1);
-        grid.getChildren().addAll(listView, checkBox, treeView, textField, button22, textField2);
-
-        choiceBox.getItems().add("Apples");
-        choiceBox.getItems().add("Bananas");
-        choiceBox.getItems().addAll("Bacon", "Ham", "Meatballs");
-        choiceBox.setValue("Bananas");
-        choiceBox.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> System.out.println(newValue));
-        HBox hBox1 = new HBox(10);
-        hBox1.setAlignment(Pos.CENTER);
-        hBox1.getChildren().add(choiceBox);
-
-        BorderPane borderPane = new BorderPane();
-        borderPane.setTop(hBox2);
-        borderPane.setLeft(layout);
-        borderPane.setBottom(hBox);
-        borderPane.setRight(hBox1);
-        borderPane.setCenter(grid);
-
-        Scene scene = new Scene(borderPane);
+        Scene scene = new Scene(panelsGroup);
         scene.getStylesheets().add("css/Evil.css");
         window.setScene(scene);
+        window.setWidth(500);
+        window.setMinWidth(500);
+        window.setHeight(700);
+        window.setMinHeight(600);
         window.showAndWait();
-    }
-
-    public static TreeItem<String> makeBranch(String title, TreeItem<String> parent) {
-        TreeItem<String> item = new TreeItem<>(title);
-        item.setExpanded(true);
-        parent.getChildren().add(item);
-        return item;
     }
 }
