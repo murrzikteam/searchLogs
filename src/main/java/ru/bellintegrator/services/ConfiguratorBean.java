@@ -57,7 +57,7 @@ public class ConfiguratorBean {
     }
 
     public void setCasheInMb(int casheInMb) {
-        this.casheInMb = casheInMb * 1000000;
+        this.casheInMb = casheInMb;
     }
 
     public String getLogsEndAnchor() {

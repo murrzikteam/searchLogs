@@ -35,9 +35,7 @@ public class MainWindow extends Application {
 
         propertiesButton.setOnAction(e -> {
             Properties.display(config);
-            if (config != null) {
-                System.out.println("Not null");
-            }
+            System.out.println("Not null");
         });
 
         HBox layout = new HBox(2);
