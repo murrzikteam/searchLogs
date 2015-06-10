@@ -71,7 +71,7 @@ public class LogParser {
                         logRecord = "";
                         continue;
                     }
-                    if(lParser.detectAnchor(logRecord, config.getSearchKeywords(), false) || lParser.detectAnchor(logRecord, config.getFoundAnchorsSet(), false)){
+                    if(lParser.detectAnchor(logRecord, config.getSearchKeywords(), true) || lParser.detectAnchor(logRecord, config.getFoundAnchorsSet(), true)){
                         lParser.searchAnchors(config.getRegExpressionsList(), logRecord, config.getFoundAnchorsSet());
                         logsCashe.append(logRecord);
                         logRecord = "";
